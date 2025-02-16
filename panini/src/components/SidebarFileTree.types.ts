@@ -11,5 +11,6 @@ export interface TreeNodeProps {
 }
 
 export interface SidebarFileTreeProps {
+  isOpen: boolean;
   treeData: FileNode | null;
 }

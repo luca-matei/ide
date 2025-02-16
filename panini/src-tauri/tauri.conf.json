@@ -13,8 +13,10 @@
     "windows": [
       {
         "title": "Panini",
-        "width": 1200,
-        "height": 720
+        "decorations": false,
+        "transparent": true,
+        "width": 1366,
+        "height": 768
       }
     ],
     "security": {
