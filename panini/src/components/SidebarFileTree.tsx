@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFolder, faFile, faChevronDown, faChevronRight } from '@fortawesome/free-solid-svg-icons'
-import {FileNode, SidebarFileTreeProps, TreeNodeProps} from "./SidebarFileTree.types.ts";
+import {SidebarFileTreeProps, TreeNodeProps} from "./SidebarFileTree.types.ts";
 
 
 const TreeNode: React.FC<TreeNodeProps> = ({ node, level, onNodeClick }) => {
@@ -37,7 +37,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({ node, level, onNodeClick }) => {
             <FontAwesomeIcon icon={faFile} className="w-4 h-4 mr-1" />
           </>
         )}
-        <span className="text-sm truncate">{node.name}</span>
+        <span className="text-sm">{node.name}</span>
       </div>
 
       {isOpen && node.is_dir && (
@@ -56,21 +56,13 @@ const TreeNode: React.FC<TreeNodeProps> = ({ node, level, onNodeClick }) => {
   );
 };
 
-const SidebarFileTree: React.FC<SidebarFileTreeProps> = ({ isOpen, treeData }) => {
-  const [selectedNode, setSelectedNode] = useState<FileNode | null>(null);
-
-  const handleNodeClick = (node: FileNode) => {
-    setSelectedNode(node);
-    // You can add additional functionality here
-  };
-
+const SidebarFileTree: React.FC<SidebarFileTreeProps> = ({ isOpen, onFileNodeSelect, treeData }) => {
   return (
     <aside className={`
-      h-full overflow-auto bg-primary
-      ${isOpen ? 'block w-64' : 'hidden'} 
-      border-r border-gray-700 flex flex-col
+      h-full bg-primary
+      ${isOpen ? 'flex w-64' : 'hidden'} 
+      border-r border-secondary flex-col
     `}>
-      {/* Tree Content */}
       <div className="flex-1 overflow-y-auto p-2">
         {!treeData ? (
           <div className="flex items-center justify-center h-full">
@@ -80,19 +72,10 @@ const SidebarFileTree: React.FC<SidebarFileTreeProps> = ({ isOpen, treeData }) =
           <TreeNode
             node={treeData}
             level={0}
-            onNodeClick={handleNodeClick}
+            onNodeClick={onFileNodeSelect}
           />
         ) : null}
       </div>
-
-      {/* Status Bar */}
-      {isOpen && selectedNode && (
-        <div className="h-8 border-t border-gray-700 px-4 flex items-center">
-          <span className="text-xs truncate">
-            Selected: {selectedNode.name}
-          </span>
-        </div>
-      )}
     </aside>
   );
 };
