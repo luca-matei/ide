@@ -21,15 +21,20 @@ interface EditorLineProps {
   lineNo: number;
   index: number;
   content: string;
+  highlightedLine: number;
+  onLineHighlight: (index: number) => () => void;
 }
 
-const EditorLine: React.FC<EditorLineProps> = ({lineNo, index, content}) => {
+const EditorLine: React.FC<EditorLineProps> = ({lineNo, index, content, highlightedLine, onLineHighlight}) => {
   const lineNoWidth = lineNo.toString().length;
   const lineNoPadding = "0".repeat(lineNoWidth - (index + 1).toString().length);
 
   return (
-    <div className={"flex"}>
-      <span className={"pl-3 pr-5 mr-1 text-sm opacity-20 border-r border-white/20 select-none"}><span className={"opacity-0"}>{lineNoPadding}</span>{index + 1}</span>
+    <div className={`flex ${highlightedLine === index ? 'bg-white/5' : ''}`} onClick={onLineHighlight(index)}>
+      <span className={"pl-3 pr-5 pt-1 mr-1 text-sm opacity-20 border-r border-white/20 select-none"}>
+        <span className={"opacity-0"}>{lineNoPadding}</span>
+        {index + 1}
+      </span>
       <span className={"whitespace-pre-wrap"}>{content}</span>
     </div>
   );
@@ -49,9 +54,16 @@ const EditorTabs: React.FC<EditorTabsProps> = () => {
 }
 
 const EditorContent: React.FC<EditorContentProps> = ({lineNo, content}) => {
+  const [highlightedLine, setHighlightedLine] = useState<number>(-1);
   if (!content) return null;
 
   const lines = content.split("\n");
+
+  function handleLineHighlight(index: number) {
+    return () => {
+      setHighlightedLine(index);
+    }
+  }
 
   return (
     <div className={"h-full overflow-auto"}>
@@ -61,6 +73,8 @@ const EditorContent: React.FC<EditorContentProps> = ({lineNo, content}) => {
           lineNo={lineNo}
           index={index}
           content={line}
+          highlightedLine={highlightedLine}
+          onLineHighlight={handleLineHighlight}
         />
       ))}
     </div>
