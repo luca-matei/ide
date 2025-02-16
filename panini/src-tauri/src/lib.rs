@@ -2,6 +2,8 @@ use serde::{Serialize};
 use std::fs;
 use std::path::Path;
 
+static IGNORE_LIST: &[&str] = &["node_modules", ".git", ".idea", ".next", ".vscode", "target"];
+
 #[derive(Debug, Serialize)]
 struct FileNode {
     name: String,
@@ -74,6 +76,9 @@ fn build_tree<P: AsRef<Path>>(path: P) -> Result<FileNode, String> {
         });
 
         for entry in entries {
+            if IGNORE_LIST.contains(&entry.file_name().to_str().unwrap()) {
+                continue;
+            }
             match build_tree(entry.path()) {
                 Ok(child_tree) => tree.children.push(child_tree),
                 Err(e) => eprintln!("Error processing {}: {}", entry.path().display(), e),

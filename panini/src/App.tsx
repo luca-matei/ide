@@ -11,7 +11,7 @@ import Editor from "./components/Editor.tsx";
 function App() {
   const [treeData, setTreeData] = useState<FileNode | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const projectPath: string = "/home/pyrite/Documents/ide-test";
+  const projectPath: string = "/home/pyrite/Dev/digital_marmot/lucamatei.eu";
   const [activeTab, setActiveTab] = useState<SlimSidebarTab>(null);
   const [selectedTreeFile, setSelectedTreeFile] = useState<FileData | null>(null);
 
